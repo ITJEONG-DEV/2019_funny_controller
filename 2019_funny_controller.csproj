@@ -223,7 +223,9 @@
     <Compile Include="Assets\Player Asset\Supercyan Character Pack Free Sample\Scripts\CameraLogic.cs" />
     <Compile Include="Assets\Player Asset\Supercyan Character Pack Free Sample\Scripts\Demo.cs" />
     <Compile Include="Assets\Player Asset\Supercyan Character Pack Free Sample\Scripts\SimpleCharacterControl.cs" />
+    <Compile Include="Assets\Script\BoatMovement.cs" />
     <Compile Include="Assets\Script\Player.cs" />
+    <Compile Include="Assets\Script\PlayerInRow.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

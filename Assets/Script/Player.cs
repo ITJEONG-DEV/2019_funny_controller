@@ -9,7 +9,8 @@ public class Player : MonoBehaviour {
     public   Text        scoreText;
     public   float       speed = 5.0f;
 
-    private  int         score;
+    private  float       score;
+    private  float       scoreFactor;
     private  float       time;
     private  float       speedFactor;
     private  float       minX;
@@ -25,7 +26,8 @@ public class Player : MonoBehaviour {
         speedFactor = 1.0f;
 
         // score
-        score = 0;
+        score = 0.0f;
+        scoreFactor = 5.0f;
         SetScoreText();
 
         // time
@@ -47,19 +49,26 @@ public class Player : MonoBehaviour {
             if(time>=0.5)
             {
                 time = 0.0f;
-                score += 1;
+                score += speed * speedFactor * scoreFactor * Time.deltaTime;
                 SetScoreText();
             }
             GetInput();
 
             MoveBackGround();
         }
+        else
+        {
+            if(transform.position.y <= 40.0f)
+            {
+                transform.position = new Vector3(transform.position.x, 40.0f, transform.position.z);
+            }
+        }
 
     }
 
     void SetScoreText()
     {
-        scoreText.text = "Score : " + score;
+        scoreText.text = Mathf.Round(score*10)/10 + "m";
     }
 
     IEnumerator SuddenAction()
@@ -77,6 +86,14 @@ public class Player : MonoBehaviour {
         if(Input.GetKey(KeyCode.RightArrow))
         {
 
+        }
+
+        if(Input.GetKey(KeyCode.Backspace))
+        {
+            isWalk = false;
+            GetComponent<Animator>().SetBool("isWalk", isWalk);
+            GetComponent<Animator>().enabled = false;
+            GetComponent<Rigidbody>().useGravity = false;
         }
     }
 

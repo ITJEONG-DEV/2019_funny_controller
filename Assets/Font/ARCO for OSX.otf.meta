@@ -1,0 +1,22 @@
+fileFormatVersion: 2
+guid: f0e4321fe981ea84caeb9cfd8eeaa415
+timeCreated: 1574503743
+licenseType: Free
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: ARCO
+  fontNames:
+  - ARCO
+  fallbackFontReferences: []
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
