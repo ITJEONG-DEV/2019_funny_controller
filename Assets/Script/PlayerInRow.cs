@@ -7,6 +7,7 @@ public class PlayerInRow : MonoBehaviour {
     public float speed = 5.0f;
     public Text scoreText;
     public Text timeText;
+    public GameObject paddle;
 
     private float scaleFactor;
     private float score;
@@ -27,6 +28,8 @@ public class PlayerInRow : MonoBehaviour {
 
     void Update()
     {
+        PaddleMoving();
+
         if (time <= 0.0f)
         {
             // ended
@@ -41,6 +44,11 @@ public class PlayerInRow : MonoBehaviour {
 
             SetTimeText();
         }
+    }
+
+    void PaddleMoving()
+    {
+        paddle.transform.rotation = Quaternion.Euler(SerialCommunication.RoadRotation);
     }
 
     void SetScoreText()

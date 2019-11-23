@@ -2,20 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour {
     public   GameObject  background1;
     public   GameObject  background2;
+    public   GameObject  gameOverImage;
     public   Text        scoreText;
     public   float       speed = 5.0f;
 
-    private  float       score;
+    private  Vector3     rotation;
+
+    private float       score;
     private  float       scoreFactor;
     private  float       time;
     private  float       speedFactor;
     private  float       minX;
     private  bool        isWalk;
     private  float       suddenAngle;
+
 
     void Start ()
     {
@@ -38,7 +43,6 @@ public class Player : MonoBehaviour {
         GetComponent<Animator>().SetBool("isWalk", isWalk);
 
         // sudden action 설정
-        suddenAngle = 0.0f;
         Invoke("SuddenAction", 3.0f);
     }
 
@@ -55,12 +59,23 @@ public class Player : MonoBehaviour {
             GetInput();
 
             MoveBackGround();
+
+            rotation = SerialCommunication.RoadRotation;
+            transform.rotation = Quaternion.Euler(new Vector3(rotation.x, transform.rotation.y, transform.rotation.z));
         }
         else
         {
             if(transform.position.y <= 40.0f)
             {
                 transform.position = new Vector3(transform.position.x, 40.0f, transform.position.z);
+
+                // game over
+                gameOverImage.SetActive(true);
+
+                if(SerialCommunication.OkButton)
+                {
+                    SceneManager.LoadScene("Main");
+                }
             }
         }
 
@@ -69,11 +84,6 @@ public class Player : MonoBehaviour {
     void SetScoreText()
     {
         scoreText.text = Mathf.Round(score*10)/10 + "m";
-    }
-
-    IEnumerator SuddenAction()
-    {
-        yield return new WaitForSeconds(1.0f);
     }
 
     void GetInput()
