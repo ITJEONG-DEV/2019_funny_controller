@@ -1,4 +1,4 @@
 sceneSetups:
-- path: Assets/Scene/Pipe-Running.unity
+- path: Assets/Scene/Row-Row-Row-YOUR-BOAT.unity
   isLoaded: 1
   isActive: 1
