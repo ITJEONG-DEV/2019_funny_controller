@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
     public   GameObject  background1;
     public   GameObject  background2;
     public   GameObject  gameOverImage;
+    public   AudioClip gameOverSound;
     public   Text        scoreText;
     public   float       speed = 5.0f;
 
@@ -68,6 +69,10 @@ public class Player : MonoBehaviour {
             if(transform.position.y <= 40.0f)
             {
                 transform.position = new Vector3(transform.position.x, 40.0f, transform.position.z);
+
+                GetComponent<AudioSource>().clip = gameOverSound;
+                GetComponent<AudioSource>().loop = false;
+                GetComponent<AudioSource>().Play();
 
                 // game over
                 gameOverImage.SetActive(true);

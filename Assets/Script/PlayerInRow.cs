@@ -2,12 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerInRow : MonoBehaviour {
     public float speed = 5.0f;
     public Text scoreText;
     public Text timeText;
     public GameObject paddle;
+    public GameObject gameManager;
 
     private float scaleFactor;
     private float score;
@@ -23,7 +25,7 @@ public class PlayerInRow : MonoBehaviour {
         SetScoreText();
 
         // set time
-        time = 30.0f;
+        time = 60.0f;
     }
 
     void Update()
@@ -34,6 +36,13 @@ public class PlayerInRow : MonoBehaviour {
         {
             // ended
             time = 0.0f;
+
+            if(SerialCommunication.OkButton)
+            {
+                SceneManager.LoadScene("Main");
+            }
+
+            gameManager.GetComponent<SerialCommunication>().Close();
         }
         else
         {
@@ -48,7 +57,8 @@ public class PlayerInRow : MonoBehaviour {
 
     void PaddleMoving()
     {
-        paddle.transform.rotation = Quaternion.Euler(SerialCommunication.RoadRotation);
+        paddle.transform.rotation = Quaternion.Euler(new Vector3(SerialCommunication.RoadRotation.z, SerialCommunication.RoadRotation.y +90, SerialCommunication.RoadRotation.x));
+        // Debug.Log(SerialCommunication.RoadRotation);
     }
 
     void SetScoreText()
@@ -63,9 +73,11 @@ public class PlayerInRow : MonoBehaviour {
 
     void Move()
     {
-        this.transform.Translate(new Vector3(0, 0, -1) * speed * scaleFactor * Time.deltaTime);
+        if (time <= 0.0f) return;
 
-        score += speed * scaleFactor * Time.deltaTime / 10;
+        this.transform.Translate(new Vector3(0, 0, -1) * speed * scaleFactor * Time.deltaTime * 5);
+
+        score += speed * scaleFactor * Time.deltaTime * 10;
         SetScoreText();
     }
 }

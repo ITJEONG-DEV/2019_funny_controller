@@ -83,7 +83,7 @@ public class SerialCommunication : MonoBehaviour
 
         serialManger = new SerialManager();
         serialManger.SetSerialPort("COM8");
-        serialManger.SetReadTimeout(1000);
+        serialManger.SetReadTimeout(75);
         serialManger.SetWriteTimeout(1000);
         serialManger.SetSerialOpen();
 
@@ -96,7 +96,12 @@ public class SerialCommunication : MonoBehaviour
         try
         {
             temp_rotation = serialManger.GetAngValue();
-            temp_rotation = new Vector3(-1*temp_rotation.z, temp_rotation.y, temp_rotation.x);
+            temp_rotation = new Vector3(temp_rotation.z, temp_rotation.y, temp_rotation.x);
+
+            button_left = serialManger.GetButtonL();
+            button_ok = serialManger.GetButtonO();
+            button_right = serialManger.GetButtonR();
+
             //temp_rotation.z *= -1;
 
             //temp_position = mySerialManager.GetPosValue();
@@ -139,5 +144,12 @@ public class SerialCommunication : MonoBehaviour
     public void AdjustController()
     {
         adjust_rotation += (adjust_rotation + temp_rotation) * -1;
+    }
+
+    public void Close()
+    {
+        serialManger.StopSerialThread();
+        Application.Quit();
+        status = STATUS.DISCONNECT;
     }
 }

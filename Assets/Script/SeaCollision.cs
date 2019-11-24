@@ -3,31 +3,64 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class SeaCollision : MonoBehaviour {
+    public GameObject left;
+    public GameObject right;
+    public GameObject player;
     static string pre = "";
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnTriggerEnter(Collider other)
     {
-        if(collision.collider.tag == "paddle")
+        if(other.gameObject.tag == "paddle")
         {
-            if(collision.collider.name == "left")
+            if(other.gameObject.name == "left")
             {
-                if(pre.Equals("right"))
+                if(pre.Equals("") || pre.Equals("right"))
+                {
+                    player.SendMessage("Move");
+
+                    pre = other.gameObject.name;
+                }
+            }
+            else if(other.gameObject.name == "right")
+            {
+                if(pre.Equals("") || pre.Equals("left"))
+                {
+                    other.gameObject.transform.parent.gameObject.SendMessage("Move");
+
+                    pre = other.gameObject.name;
+                }
+            }
+        }
+
+        Debug.Log("tag: " + other.gameObject.tag + " name: " + other.gameObject.name);
+    }
+
+    private void OnTriggerEnter(Collision other)
+    {
+        Debug.Log("name : " + other.transform.name + "tag : " + other.transform.tag);
+
+        if(other.transform.tag == "paddle")
+        {
+            if(other.transform.name == "left")
+            {
+                if (pre.Equals("right") || pre.Equals(""))
                 {
                     // score & move
-                    collision.collider.SendMessage("Move");
+                    other.transform.SendMessage("Move");
                 }
-
-                pre = collision.collider.name;
+                pre = other.transform.name;
             }
-            else if(collision.collider.name =="right")
+            else if(other.transform.name =="right")
             {
-                if(pre.Equals("left"))
+                if(pre.Equals("left") || pre.Equals(""))
                 {
-                    collision.collider.SendMessage("Move");
+                    other.transform.SendMessage("Move");
                 }
 
-                pre = collision.collider.name;
+                pre = other.transform.name;
             }
+
+            Debug.Log("paddle pre : " + pre + "cur : " + other.transform.name);
         }
     }
 }

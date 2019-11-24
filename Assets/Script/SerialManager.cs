@@ -12,8 +12,8 @@ public class SerialManager
     private SerialPort _serialPort;
     private string defaultPortName = "COM7";
     private int BaudRate = 115200;
-    private int ReadTimeout = 50;
-    private int WriteTimeout = 100;
+    private int ReadTimeout = 150;
+    private int WriteTimeout = 150;
     private bool isStart = true;
     private bool isClassify = false;
     private bool isThread = false;
@@ -23,6 +23,8 @@ public class SerialManager
     private float px = 0.0f, py = 0.0f, pz = 0.0f;
 
     private bool isax = false, isay = false, isaz = false;
+
+    private bool bl, bo, br;
 
     private Thread _serialThread;
 
@@ -116,8 +118,6 @@ public class SerialManager
     {
         if (!_serialPort.IsOpen) return;
 
-        UnityEngine.Debug.Log("classify function");
-
         //if (!isStart) ClassifyHandType();
         //else
         //{
@@ -136,6 +136,13 @@ public class SerialManager
             data += (char)_serialPort.ReadChar();
             switch (data)
             {
+                case "00":
+                case "01":
+                case "10":
+                case "11":
+                    data += (char)_serialPort.ReadChar();
+                    SetButtonValue(data);
+                    break;
                 case "GY":
                     character = (char)_serialPort.ReadChar();
                     values = _serialPort.ReadLine();
@@ -161,6 +168,10 @@ public class SerialManager
                     values = _serialPort.ReadLine();
                     //SetFinValue(values);
                     break;
+                default:
+                    values = data + _serialPort.ReadLine();
+                    //UnityEngine.Debug.Log(values);
+                    break;
             }
             // UnityEngine.Debug.Log("data : " + data + " values : " + values);
         }
@@ -177,7 +188,7 @@ public class SerialManager
         if (!_serialPort.IsOpen) return;
 
         _serialPort.Write("1 1");
-        UnityEngine.Debug.Log("DMP");
+        // UnityEngine.Debug.Log("DMP");
 
         isClassify = true;
     }
@@ -286,7 +297,59 @@ public class SerialManager
 
         // UnityEngine.Debug.Log(axis + " axis pos value  : " + values);
     }
+    void SetButtonValue(string data)
+    {
+        UnityEngine.Debug.Log(data);
+        switch(data)
+        {
+            case "000":
+                bl = false;
+                bo = false;
+                br = false;
+                break;
+            case "001":
+                bl = false;
+                bo = false;
+                br = true;
+                break;
+            case "010":
+                bl = false;
+                bo = true;
+                br = false;
+                break;
+            case "011":
+                bl = false;
+                bo = true;
+                br = true;
+                break;
+            case "100":
+                bl = true;
+                bo = false;
+                br = false;
+                break;
+            case "101":
+                bl = true;
+                bo = false;
+                br = true;
+                break;
+            case "110":
+                bl = true;
+                bo = true;
+                br = false;
+                break;
+            case "111":
+                bl = true;
+                bo = true;
+                br = true;
+                break;
 
+
+
+
+
+
+        }
+    }
     // get measure value
     public Vector3 GetAngValue()
     {
@@ -295,6 +358,18 @@ public class SerialManager
     public Vector3 GetPosValue()
     {
         return new Vector3(px, py, pz);
+    }
+    public bool GetButtonL()
+    {
+        return bl;
+    }
+    public bool GetButtonO()
+    {
+        return bo;
+    }
+    public bool GetButtonR()
+    {
+        return br;
     }
 
 }
